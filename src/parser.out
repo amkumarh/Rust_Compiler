@@ -1,0 +1,3845 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    MOVE
+    PRIV
+    OPEN_BRACKET
+    IMPL
+    ENUM
+    UNSIZED
+    ARROW
+    WHERE
+    OFFSETOF
+    ALIGNOF
+    TRAIT
+    TYPEOF
+    BOX
+    RETURN
+    STATIC
+    FINAL
+    STRING
+    SELFTYPE
+    SHEBANG_LINE
+    VIRTUAL
+    D_COLON
+    CRATE
+    CONTINUE
+    PROC
+    MOD
+    EXTERN
+    REF
+    DOT
+    SELFVALUE
+    PUB
+    BREAK
+    TYPE
+    CLOSE_BRACKET
+    DO
+    USE
+    CONST
+    ABSTRACT
+    SIZEOF
+    OVERRIDE
+    BECOME
+    MACRO
+    YIELD
+    AS
+    PURE
+    SUPER
+
+Grammar
+
+Rule 0     S' -> compilation_unit
+Rule 1     compilation_unit -> ProgramFile
+Rule 2     ProgramFile -> fun_def main_fun
+Rule 3     ProgramFile -> main_fun
+Rule 4     main_fun -> FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+Rule 5     fun_def -> FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+Rule 6     fun_def -> FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+Rule 7     fun_def -> fun_def FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+Rule 8     fun_def -> fun_def FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+Rule 9     stmts -> non_block_stmt
+Rule 10    stmts -> non_block_stmt stmts
+Rule 11    stmts -> block_stmt
+Rule 12    stmts -> block_stmt stmts
+Rule 13    non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+Rule 14    non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+Rule 15    non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+Rule 16    non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+Rule 17    non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON
+Rule 18    non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON
+Rule 19    non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+Rule 20    non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+Rule 21    non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+Rule 22    non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+Rule 23    non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+Rule 24    non_block_stmt -> binop
+Rule 25    non_block_stmt -> bitop
+Rule 26    non_block_stmt -> fn_call
+Rule 27    non_block_stmt -> print_ident
+Rule 28    print_ident -> PRINT ident SEMICOLON
+Rule 29    binop -> ident ASSIGNMENT_OP expr SEMICOLON
+Rule 30    expr -> ident
+Rule 31    expr -> expr arith_op ident
+Rule 32    arith_op -> PLUS
+Rule 33    arith_op -> MINUS
+Rule 34    arith_op -> MULTIPLICATION
+Rule 35    arith_op -> DIVISION
+Rule 36    arith_op -> MODULUS
+Rule 37    bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON
+Rule 38    b_expr -> ident
+Rule 39    b_expr -> b_expr bit_op ident
+Rule 40    bit_op -> AND_LOGICAL
+Rule 41    bit_op -> OR_LOGICAL
+Rule 42    bit_op -> XOR_OP
+Rule 43    bit_op -> NOT_OP
+Rule 44    bit_op -> LEFT_SHIFT
+Rule 45    bit_op -> RIGHT_SHIFT
+Rule 46    fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+Rule 47    fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+Rule 48    arguments -> ident
+Rule 49    arguments -> ident COMMA arguments
+Rule 50    block_stmt -> loop_block
+Rule 51    block_stmt -> while_block
+Rule 52    block_stmt -> for_block
+Rule 53    block_stmt -> if_block
+Rule 54    block_stmt -> if_else_block
+Rule 55    block_stmt -> else_if_block
+Rule 56    block_stmt -> unsafe_block
+Rule 57    block_stmt -> match_block
+Rule 58    block_stmt -> struct_block
+Rule 59    loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK
+Rule 60    while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+Rule 61    while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+Rule 62    while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK
+Rule 63    while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+Rule 64    while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+Rule 65    for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+Rule 66    if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+Rule 67    if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+Rule 68    operator -> EQUALS_COMP
+Rule 69    operator -> GREATER_EQUAL_OP
+Rule 70    operator -> LESS_EQUAL_OP
+Rule 71    operator -> LESS_THAN
+Rule 72    operator -> GREATER_THAN
+Rule 73    operator -> LESSEQUAL
+Rule 74    operator -> NOTEQUAL
+Rule 75    operator -> OR_OP
+Rule 76    operator -> AND_OP
+Rule 77    if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+Rule 78    else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+Rule 79    unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK
+Rule 80    match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+Rule 81    match_stmt -> non_block_stmt mat non_block_stmt
+Rule 82    match_stmt -> LIT_INTEGER mat non_block_stmt
+Rule 83    struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+Rule 84    struct_stmt -> ident COLON i32
+
+Terminals, with rules where they appear
+
+ABSTRACT             : 
+ALIGNOF              : 
+AND_LOGICAL          : 40
+AND_OP               : 76
+ARROW                : 
+AS                   : 
+ASSIGNMENT_OP        : 13 14 15 16 17 18 19 20 21 22 29 37
+BECOME               : 
+BEGIN_BLOCK          : 4 5 6 7 8 59 60 61 62 63 64 65 66 67 77 78 79 80 83
+BOX                  : 
+BREAK                : 
+CLOSE_BRACKET        : 
+CLOSE_PARANTHESIS    : 4 5 6 7 8 23 46 47 66 67
+COLON                : 84
+COMMA                : 49
+CONST                : 
+CONTINUE             : 
+CRATE                : 
+DIVISION             : 35
+DO                   : 
+DOT                  : 
+D_COLON              : 
+D_DOT                : 65
+ELSE                 : 77 78 78
+END_BLOCK            : 4 5 6 7 8 59 60 61 62 63 64 65 66 67 77 78 79 80 83
+ENUM                 : 
+EQUALS_COMP          : 63 64 67 68
+EXTERN               : 
+FALSE                : 18 22 61
+FINAL                : 
+FN                   : 4 5 6 7 8
+FOR                  : 65
+GREATER_EQUAL_OP     : 69
+GREATER_THAN         : 72
+IF                   : 66 67
+IMPL                 : 
+IN                   : 65
+LEFT_SHIFT           : 44
+LESSEQUAL            : 73
+LESS_EQUAL_OP        : 70
+LESS_THAN            : 71
+LET                  : 13 14 15 16 17 18 19 20 21 22
+LIT_FLOAT            : 15 20 64 67
+LIT_INTEGER          : 14 16 19 63 65 65 66 82
+LOOP                 : 59
+MACRO                : 
+MAIN_FUN             : 4
+MATCH                : 80
+MINUS                : 16 33
+MOD                  : 
+MODULUS              : 36
+MOVE                 : 
+MULTIPLICATION       : 34
+MUT                  : 19 20 21 22
+NOTEQUAL             : 74
+NOT_OP               : 43
+OFFSETOF             : 
+OPEN_BRACKET         : 
+OPEN_PARANTHESIS     : 4 5 6 7 8 23 46 47 66 67
+OR_LOGICAL           : 41
+OR_OP                : 75
+OVERRIDE             : 
+PLUS                 : 32
+PRINT                : 23 28
+PRIV                 : 
+PROC                 : 
+PUB                  : 
+PURE                 : 
+REF                  : 
+RETURN               : 
+RIGHT_SHIFT          : 45
+SELFTYPE             : 
+SELFVALUE            : 
+SEMICOLON            : 13 14 15 16 17 18 19 20 21 22 23 28 29 37 46 47
+SENTENCE             : 13 23
+SHEBANG_LINE         : 
+SIZEOF               : 
+STATIC               : 
+STRING               : 
+STRUCT               : 83
+SUPER                : 
+TRAIT                : 
+TRUE                 : 17 21 60
+TYPE                 : 
+TYPEOF               : 
+UNSAFE               : 79
+UNSIZED              : 
+USE                  : 
+VIRTUAL              : 
+WHERE                : 
+WHILE                : 60 61 62 63 64
+XOR_OP               : 42
+YIELD                : 
+error                : 
+i32                  : 84
+ident                : 5 6 7 8 13 14 15 16 17 18 19 20 21 22 28 29 30 31 37 38 39 46 47 48 49 62 63 64 65 66 67 80 83 84
+mat                  : 81 82
+
+Nonterminals, with rules where they appear
+
+ProgramFile          : 1
+arguments            : 5 7 46 49
+arith_op             : 31
+b_expr               : 37 39
+binop                : 24
+bit_op               : 39
+bitop                : 25
+block_stmt           : 11 12
+compilation_unit     : 0
+else_if_block        : 55
+expr                 : 29 31
+fn_call              : 26
+for_block            : 52
+fun_def              : 2 7 8
+if_block             : 53 77 78 78
+if_else_block        : 54
+loop_block           : 50
+main_fun             : 2 3
+match_block          : 57
+match_stmt           : 80
+non_block_stmt       : 9 10 81 81 82
+operator             : 66 67
+print_ident          : 27
+stmts                : 4 5 6 7 8 10 12 59 60 61 62 63 64 65 66 67 77 78 79
+struct_block         : 58
+struct_stmt          : 83
+unsafe_block         : 56
+while_block          : 51
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . compilation_unit
+    (1) compilation_unit -> . ProgramFile
+    (2) ProgramFile -> . fun_def main_fun
+    (3) ProgramFile -> . main_fun
+    (5) fun_def -> . FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (6) fun_def -> . FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (7) fun_def -> . fun_def FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (8) fun_def -> . fun_def FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (4) main_fun -> . FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    FN              shift and go to state 5
+
+    ProgramFile                    shift and go to state 1
+    fun_def                        shift and go to state 2
+    compilation_unit               shift and go to state 3
+    main_fun                       shift and go to state 4
+
+state 1
+
+    (1) compilation_unit -> ProgramFile .
+
+    $end            reduce using rule 1 (compilation_unit -> ProgramFile .)
+
+
+state 2
+
+    (2) ProgramFile -> fun_def . main_fun
+    (7) fun_def -> fun_def . FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (8) fun_def -> fun_def . FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (4) main_fun -> . FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    FN              shift and go to state 7
+
+    main_fun                       shift and go to state 6
+
+state 3
+
+    (0) S' -> compilation_unit .
+
+
+
+state 4
+
+    (3) ProgramFile -> main_fun .
+
+    $end            reduce using rule 3 (ProgramFile -> main_fun .)
+
+
+state 5
+
+    (5) fun_def -> FN . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (6) fun_def -> FN . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (4) main_fun -> FN . MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    ident           shift and go to state 8
+    MAIN_FUN        shift and go to state 9
+
+
+state 6
+
+    (2) ProgramFile -> fun_def main_fun .
+
+    $end            reduce using rule 2 (ProgramFile -> fun_def main_fun .)
+
+
+state 7
+
+    (7) fun_def -> fun_def FN . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (8) fun_def -> fun_def FN . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (4) main_fun -> FN . MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    ident           shift and go to state 10
+    MAIN_FUN        shift and go to state 9
+
+
+state 8
+
+    (5) fun_def -> FN ident . OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (6) fun_def -> FN ident . OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    OPEN_PARANTHESIS shift and go to state 11
+
+
+state 9
+
+    (4) main_fun -> FN MAIN_FUN . OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    OPEN_PARANTHESIS shift and go to state 12
+
+
+state 10
+
+    (7) fun_def -> fun_def FN ident . OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (8) fun_def -> fun_def FN ident . OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    OPEN_PARANTHESIS shift and go to state 13
+
+
+state 11
+
+    (5) fun_def -> FN ident OPEN_PARANTHESIS . arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (6) fun_def -> FN ident OPEN_PARANTHESIS . CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (48) arguments -> . ident
+    (49) arguments -> . ident COMMA arguments
+
+    CLOSE_PARANTHESIS shift and go to state 15
+    ident           shift and go to state 14
+
+    arguments                      shift and go to state 16
+
+state 12
+
+    (4) main_fun -> FN MAIN_FUN OPEN_PARANTHESIS . CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    CLOSE_PARANTHESIS shift and go to state 17
+
+
+state 13
+
+    (7) fun_def -> fun_def FN ident OPEN_PARANTHESIS . arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (8) fun_def -> fun_def FN ident OPEN_PARANTHESIS . CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (48) arguments -> . ident
+    (49) arguments -> . ident COMMA arguments
+
+    CLOSE_PARANTHESIS shift and go to state 18
+    ident           shift and go to state 14
+
+    arguments                      shift and go to state 19
+
+state 14
+
+    (48) arguments -> ident .
+    (49) arguments -> ident . COMMA arguments
+
+    CLOSE_PARANTHESIS reduce using rule 48 (arguments -> ident .)
+    COMMA           shift and go to state 20
+
+
+state 15
+
+    (6) fun_def -> FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 21
+
+
+state 16
+
+    (5) fun_def -> FN ident OPEN_PARANTHESIS arguments . CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    CLOSE_PARANTHESIS shift and go to state 22
+
+
+state 17
+
+    (4) main_fun -> FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 23
+
+
+state 18
+
+    (8) fun_def -> fun_def FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 24
+
+
+state 19
+
+    (7) fun_def -> fun_def FN ident OPEN_PARANTHESIS arguments . CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    CLOSE_PARANTHESIS shift and go to state 25
+
+
+state 20
+
+    (49) arguments -> ident COMMA . arguments
+    (48) arguments -> . ident
+    (49) arguments -> . ident COMMA arguments
+
+    ident           shift and go to state 14
+
+    arguments                      shift and go to state 26
+
+state 21
+
+    (6) fun_def -> FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 36
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 22
+
+    (5) fun_def -> FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 53
+
+
+state 23
+
+    (4) main_fun -> FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 54
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 24
+
+    (8) fun_def -> fun_def FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 55
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 25
+
+    (7) fun_def -> fun_def FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 56
+
+
+state 26
+
+    (49) arguments -> ident COMMA arguments .
+
+    CLOSE_PARANTHESIS reduce using rule 49 (arguments -> ident COMMA arguments .)
+
+
+state 27
+
+    (52) block_stmt -> for_block .
+
+    LET             reduce using rule 52 (block_stmt -> for_block .)
+    PRINT           reduce using rule 52 (block_stmt -> for_block .)
+    ident           reduce using rule 52 (block_stmt -> for_block .)
+    LOOP            reduce using rule 52 (block_stmt -> for_block .)
+    WHILE           reduce using rule 52 (block_stmt -> for_block .)
+    FOR             reduce using rule 52 (block_stmt -> for_block .)
+    IF              reduce using rule 52 (block_stmt -> for_block .)
+    UNSAFE          reduce using rule 52 (block_stmt -> for_block .)
+    MATCH           reduce using rule 52 (block_stmt -> for_block .)
+    STRUCT          reduce using rule 52 (block_stmt -> for_block .)
+    END_BLOCK       reduce using rule 52 (block_stmt -> for_block .)
+
+
+state 28
+
+    (58) block_stmt -> struct_block .
+
+    LET             reduce using rule 58 (block_stmt -> struct_block .)
+    PRINT           reduce using rule 58 (block_stmt -> struct_block .)
+    ident           reduce using rule 58 (block_stmt -> struct_block .)
+    LOOP            reduce using rule 58 (block_stmt -> struct_block .)
+    WHILE           reduce using rule 58 (block_stmt -> struct_block .)
+    FOR             reduce using rule 58 (block_stmt -> struct_block .)
+    IF              reduce using rule 58 (block_stmt -> struct_block .)
+    UNSAFE          reduce using rule 58 (block_stmt -> struct_block .)
+    MATCH           reduce using rule 58 (block_stmt -> struct_block .)
+    STRUCT          reduce using rule 58 (block_stmt -> struct_block .)
+    END_BLOCK       reduce using rule 58 (block_stmt -> struct_block .)
+
+
+state 29
+
+    (79) unsafe_block -> UNSAFE . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 57
+
+
+state 30
+
+    (60) while_block -> WHILE . TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> WHILE . FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> WHILE . ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> WHILE . ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> WHILE . ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+
+    TRUE            shift and go to state 60
+    FALSE           shift and go to state 59
+    ident           shift and go to state 58
+
+
+state 31
+
+    (27) non_block_stmt -> print_ident .
+
+    LET             reduce using rule 27 (non_block_stmt -> print_ident .)
+    PRINT           reduce using rule 27 (non_block_stmt -> print_ident .)
+    ident           reduce using rule 27 (non_block_stmt -> print_ident .)
+    LOOP            reduce using rule 27 (non_block_stmt -> print_ident .)
+    WHILE           reduce using rule 27 (non_block_stmt -> print_ident .)
+    FOR             reduce using rule 27 (non_block_stmt -> print_ident .)
+    IF              reduce using rule 27 (non_block_stmt -> print_ident .)
+    UNSAFE          reduce using rule 27 (non_block_stmt -> print_ident .)
+    MATCH           reduce using rule 27 (non_block_stmt -> print_ident .)
+    STRUCT          reduce using rule 27 (non_block_stmt -> print_ident .)
+    END_BLOCK       reduce using rule 27 (non_block_stmt -> print_ident .)
+    mat             reduce using rule 27 (non_block_stmt -> print_ident .)
+
+
+state 32
+
+    (23) non_block_stmt -> PRINT . OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> PRINT . ident SEMICOLON
+
+    OPEN_PARANTHESIS shift and go to state 62
+    ident           shift and go to state 61
+
+
+state 33
+
+    (25) non_block_stmt -> bitop .
+
+    LET             reduce using rule 25 (non_block_stmt -> bitop .)
+    PRINT           reduce using rule 25 (non_block_stmt -> bitop .)
+    ident           reduce using rule 25 (non_block_stmt -> bitop .)
+    LOOP            reduce using rule 25 (non_block_stmt -> bitop .)
+    WHILE           reduce using rule 25 (non_block_stmt -> bitop .)
+    FOR             reduce using rule 25 (non_block_stmt -> bitop .)
+    IF              reduce using rule 25 (non_block_stmt -> bitop .)
+    UNSAFE          reduce using rule 25 (non_block_stmt -> bitop .)
+    MATCH           reduce using rule 25 (non_block_stmt -> bitop .)
+    STRUCT          reduce using rule 25 (non_block_stmt -> bitop .)
+    END_BLOCK       reduce using rule 25 (non_block_stmt -> bitop .)
+    mat             reduce using rule 25 (non_block_stmt -> bitop .)
+
+
+state 34
+
+    (26) non_block_stmt -> fn_call .
+
+    LET             reduce using rule 26 (non_block_stmt -> fn_call .)
+    PRINT           reduce using rule 26 (non_block_stmt -> fn_call .)
+    ident           reduce using rule 26 (non_block_stmt -> fn_call .)
+    LOOP            reduce using rule 26 (non_block_stmt -> fn_call .)
+    WHILE           reduce using rule 26 (non_block_stmt -> fn_call .)
+    FOR             reduce using rule 26 (non_block_stmt -> fn_call .)
+    IF              reduce using rule 26 (non_block_stmt -> fn_call .)
+    UNSAFE          reduce using rule 26 (non_block_stmt -> fn_call .)
+    MATCH           reduce using rule 26 (non_block_stmt -> fn_call .)
+    STRUCT          reduce using rule 26 (non_block_stmt -> fn_call .)
+    END_BLOCK       reduce using rule 26 (non_block_stmt -> fn_call .)
+    mat             reduce using rule 26 (non_block_stmt -> fn_call .)
+
+
+state 35
+
+    (80) match_block -> MATCH . ident BEGIN_BLOCK match_stmt END_BLOCK
+
+    ident           shift and go to state 63
+
+
+state 36
+
+    (6) fun_def -> FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 64
+
+
+state 37
+
+    (24) non_block_stmt -> binop .
+
+    LET             reduce using rule 24 (non_block_stmt -> binop .)
+    PRINT           reduce using rule 24 (non_block_stmt -> binop .)
+    ident           reduce using rule 24 (non_block_stmt -> binop .)
+    LOOP            reduce using rule 24 (non_block_stmt -> binop .)
+    WHILE           reduce using rule 24 (non_block_stmt -> binop .)
+    FOR             reduce using rule 24 (non_block_stmt -> binop .)
+    IF              reduce using rule 24 (non_block_stmt -> binop .)
+    UNSAFE          reduce using rule 24 (non_block_stmt -> binop .)
+    MATCH           reduce using rule 24 (non_block_stmt -> binop .)
+    STRUCT          reduce using rule 24 (non_block_stmt -> binop .)
+    END_BLOCK       reduce using rule 24 (non_block_stmt -> binop .)
+    mat             reduce using rule 24 (non_block_stmt -> binop .)
+
+
+state 38
+
+    (55) block_stmt -> else_if_block .
+
+    LET             reduce using rule 55 (block_stmt -> else_if_block .)
+    PRINT           reduce using rule 55 (block_stmt -> else_if_block .)
+    ident           reduce using rule 55 (block_stmt -> else_if_block .)
+    LOOP            reduce using rule 55 (block_stmt -> else_if_block .)
+    WHILE           reduce using rule 55 (block_stmt -> else_if_block .)
+    FOR             reduce using rule 55 (block_stmt -> else_if_block .)
+    IF              reduce using rule 55 (block_stmt -> else_if_block .)
+    UNSAFE          reduce using rule 55 (block_stmt -> else_if_block .)
+    MATCH           reduce using rule 55 (block_stmt -> else_if_block .)
+    STRUCT          reduce using rule 55 (block_stmt -> else_if_block .)
+    END_BLOCK       reduce using rule 55 (block_stmt -> else_if_block .)
+
+
+state 39
+
+    (11) stmts -> block_stmt .
+    (12) stmts -> block_stmt . stmts
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    END_BLOCK       reduce using rule 11 (stmts -> block_stmt .)
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 65
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    non_block_stmt                 shift and go to state 48
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 40
+
+    (56) block_stmt -> unsafe_block .
+
+    LET             reduce using rule 56 (block_stmt -> unsafe_block .)
+    PRINT           reduce using rule 56 (block_stmt -> unsafe_block .)
+    ident           reduce using rule 56 (block_stmt -> unsafe_block .)
+    LOOP            reduce using rule 56 (block_stmt -> unsafe_block .)
+    WHILE           reduce using rule 56 (block_stmt -> unsafe_block .)
+    FOR             reduce using rule 56 (block_stmt -> unsafe_block .)
+    IF              reduce using rule 56 (block_stmt -> unsafe_block .)
+    UNSAFE          reduce using rule 56 (block_stmt -> unsafe_block .)
+    MATCH           reduce using rule 56 (block_stmt -> unsafe_block .)
+    STRUCT          reduce using rule 56 (block_stmt -> unsafe_block .)
+    END_BLOCK       reduce using rule 56 (block_stmt -> unsafe_block .)
+
+
+state 41
+
+    (83) struct_block -> STRUCT . ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    ident           shift and go to state 66
+
+
+state 42
+
+    (65) for_block -> FOR . ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+
+    ident           shift and go to state 67
+
+
+state 43
+
+    (50) block_stmt -> loop_block .
+
+    LET             reduce using rule 50 (block_stmt -> loop_block .)
+    PRINT           reduce using rule 50 (block_stmt -> loop_block .)
+    ident           reduce using rule 50 (block_stmt -> loop_block .)
+    LOOP            reduce using rule 50 (block_stmt -> loop_block .)
+    WHILE           reduce using rule 50 (block_stmt -> loop_block .)
+    FOR             reduce using rule 50 (block_stmt -> loop_block .)
+    IF              reduce using rule 50 (block_stmt -> loop_block .)
+    UNSAFE          reduce using rule 50 (block_stmt -> loop_block .)
+    MATCH           reduce using rule 50 (block_stmt -> loop_block .)
+    STRUCT          reduce using rule 50 (block_stmt -> loop_block .)
+    END_BLOCK       reduce using rule 50 (block_stmt -> loop_block .)
+
+
+state 44
+
+    (66) if_block -> IF . OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> IF . OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    OPEN_PARANTHESIS shift and go to state 68
+
+
+state 45
+
+    (54) block_stmt -> if_else_block .
+
+    LET             reduce using rule 54 (block_stmt -> if_else_block .)
+    PRINT           reduce using rule 54 (block_stmt -> if_else_block .)
+    ident           reduce using rule 54 (block_stmt -> if_else_block .)
+    LOOP            reduce using rule 54 (block_stmt -> if_else_block .)
+    WHILE           reduce using rule 54 (block_stmt -> if_else_block .)
+    FOR             reduce using rule 54 (block_stmt -> if_else_block .)
+    IF              reduce using rule 54 (block_stmt -> if_else_block .)
+    UNSAFE          reduce using rule 54 (block_stmt -> if_else_block .)
+    MATCH           reduce using rule 54 (block_stmt -> if_else_block .)
+    STRUCT          reduce using rule 54 (block_stmt -> if_else_block .)
+    END_BLOCK       reduce using rule 54 (block_stmt -> if_else_block .)
+
+
+state 46
+
+    (29) binop -> ident . ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> ident . ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> ident . OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> ident . OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+
+    ASSIGNMENT_OP   shift and go to state 69
+    OPEN_PARANTHESIS shift and go to state 70
+
+
+state 47
+
+    (53) block_stmt -> if_block .
+    (77) if_else_block -> if_block . ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> if_block . ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+
+    LET             reduce using rule 53 (block_stmt -> if_block .)
+    PRINT           reduce using rule 53 (block_stmt -> if_block .)
+    ident           reduce using rule 53 (block_stmt -> if_block .)
+    LOOP            reduce using rule 53 (block_stmt -> if_block .)
+    WHILE           reduce using rule 53 (block_stmt -> if_block .)
+    FOR             reduce using rule 53 (block_stmt -> if_block .)
+    IF              reduce using rule 53 (block_stmt -> if_block .)
+    UNSAFE          reduce using rule 53 (block_stmt -> if_block .)
+    MATCH           reduce using rule 53 (block_stmt -> if_block .)
+    STRUCT          reduce using rule 53 (block_stmt -> if_block .)
+    END_BLOCK       reduce using rule 53 (block_stmt -> if_block .)
+    ELSE            shift and go to state 71
+
+
+state 48
+
+    (9) stmts -> non_block_stmt .
+    (10) stmts -> non_block_stmt . stmts
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    END_BLOCK       reduce using rule 9 (stmts -> non_block_stmt .)
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 72
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 49
+
+    (51) block_stmt -> while_block .
+
+    LET             reduce using rule 51 (block_stmt -> while_block .)
+    PRINT           reduce using rule 51 (block_stmt -> while_block .)
+    ident           reduce using rule 51 (block_stmt -> while_block .)
+    LOOP            reduce using rule 51 (block_stmt -> while_block .)
+    WHILE           reduce using rule 51 (block_stmt -> while_block .)
+    FOR             reduce using rule 51 (block_stmt -> while_block .)
+    IF              reduce using rule 51 (block_stmt -> while_block .)
+    UNSAFE          reduce using rule 51 (block_stmt -> while_block .)
+    MATCH           reduce using rule 51 (block_stmt -> while_block .)
+    STRUCT          reduce using rule 51 (block_stmt -> while_block .)
+    END_BLOCK       reduce using rule 51 (block_stmt -> while_block .)
+
+
+state 50
+
+    (13) non_block_stmt -> LET . ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> LET . ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> LET . ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> LET . ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> LET . ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> LET . ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> LET . MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> LET . MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> LET . MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> LET . MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+
+    ident           shift and go to state 74
+    MUT             shift and go to state 73
+
+
+state 51
+
+    (57) block_stmt -> match_block .
+
+    LET             reduce using rule 57 (block_stmt -> match_block .)
+    PRINT           reduce using rule 57 (block_stmt -> match_block .)
+    ident           reduce using rule 57 (block_stmt -> match_block .)
+    LOOP            reduce using rule 57 (block_stmt -> match_block .)
+    WHILE           reduce using rule 57 (block_stmt -> match_block .)
+    FOR             reduce using rule 57 (block_stmt -> match_block .)
+    IF              reduce using rule 57 (block_stmt -> match_block .)
+    UNSAFE          reduce using rule 57 (block_stmt -> match_block .)
+    MATCH           reduce using rule 57 (block_stmt -> match_block .)
+    STRUCT          reduce using rule 57 (block_stmt -> match_block .)
+    END_BLOCK       reduce using rule 57 (block_stmt -> match_block .)
+
+
+state 52
+
+    (59) loop_block -> LOOP . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 75
+
+
+state 53
+
+    (5) fun_def -> FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    print_ident                    shift and go to state 31
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 76
+    else_if_block                  shift and go to state 38
+    match_block                    shift and go to state 51
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    non_block_stmt                 shift and go to state 48
+    while_block                    shift and go to state 49
+
+state 54
+
+    (4) main_fun -> FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 77
+
+
+state 55
+
+    (8) fun_def -> fun_def FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 78
+
+
+state 56
+
+    (7) fun_def -> fun_def FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    print_ident                    shift and go to state 31
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 79
+    else_if_block                  shift and go to state 38
+    match_block                    shift and go to state 51
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    non_block_stmt                 shift and go to state 48
+    while_block                    shift and go to state 49
+
+state 57
+
+    (79) unsafe_block -> UNSAFE BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 80
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 58
+
+    (62) while_block -> WHILE ident . BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> WHILE ident . EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> WHILE ident . EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 81
+    EQUALS_COMP     shift and go to state 82
+
+
+state 59
+
+    (61) while_block -> WHILE FALSE . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 83
+
+
+state 60
+
+    (60) while_block -> WHILE TRUE . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 84
+
+
+state 61
+
+    (28) print_ident -> PRINT ident . SEMICOLON
+
+    SEMICOLON       shift and go to state 85
+
+
+state 62
+
+    (23) non_block_stmt -> PRINT OPEN_PARANTHESIS . SENTENCE CLOSE_PARANTHESIS SEMICOLON
+
+    SENTENCE        shift and go to state 86
+
+
+state 63
+
+    (80) match_block -> MATCH ident . BEGIN_BLOCK match_stmt END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 87
+
+
+state 64
+
+    (6) fun_def -> FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .
+
+    FN              reduce using rule 6 (fun_def -> FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 65
+
+    (12) stmts -> block_stmt stmts .
+
+    END_BLOCK       reduce using rule 12 (stmts -> block_stmt stmts .)
+
+
+state 66
+
+    (83) struct_block -> STRUCT ident . BEGIN_BLOCK struct_stmt END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 88
+
+
+state 67
+
+    (65) for_block -> FOR ident . IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+
+    IN              shift and go to state 89
+
+
+state 68
+
+    (66) if_block -> IF OPEN_PARANTHESIS . ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> IF OPEN_PARANTHESIS . ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    ident           shift and go to state 90
+
+
+state 69
+
+    (29) binop -> ident ASSIGNMENT_OP . expr SEMICOLON
+    (37) bitop -> ident ASSIGNMENT_OP . b_expr SEMICOLON
+    (30) expr -> . ident
+    (31) expr -> . expr arith_op ident
+    (38) b_expr -> . ident
+    (39) b_expr -> . b_expr bit_op ident
+
+    ident           shift and go to state 91
+
+    expr                           shift and go to state 93
+    b_expr                         shift and go to state 92
+
+state 70
+
+    (46) fn_call -> ident OPEN_PARANTHESIS . arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> ident OPEN_PARANTHESIS . CLOSE_PARANTHESIS SEMICOLON
+    (48) arguments -> . ident
+    (49) arguments -> . ident COMMA arguments
+
+    CLOSE_PARANTHESIS shift and go to state 94
+    ident           shift and go to state 14
+
+    arguments                      shift and go to state 95
+
+state 71
+
+    (77) if_else_block -> if_block ELSE . BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> if_block ELSE . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 96
+    IF              shift and go to state 44
+
+    if_block                       shift and go to state 97
+
+state 72
+
+    (10) stmts -> non_block_stmt stmts .
+
+    END_BLOCK       reduce using rule 10 (stmts -> non_block_stmt stmts .)
+
+
+state 73
+
+    (19) non_block_stmt -> LET MUT . ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> LET MUT . ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> LET MUT . ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> LET MUT . ident ASSIGNMENT_OP FALSE SEMICOLON
+
+    ident           shift and go to state 98
+
+
+state 74
+
+    (13) non_block_stmt -> LET ident . ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> LET ident . ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> LET ident . ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> LET ident . ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> LET ident . ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> LET ident . ASSIGNMENT_OP FALSE SEMICOLON
+
+    ASSIGNMENT_OP   shift and go to state 99
+
+
+state 75
+
+    (59) loop_block -> LOOP BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 100
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 76
+
+    (5) fun_def -> FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 101
+
+
+state 77
+
+    (4) main_fun -> FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .
+
+    $end            reduce using rule 4 (main_fun -> FN MAIN_FUN OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 78
+
+    (8) fun_def -> fun_def FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .
+
+    FN              reduce using rule 8 (fun_def -> fun_def FN ident OPEN_PARANTHESIS CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 79
+
+    (7) fun_def -> fun_def FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 102
+
+
+state 80
+
+    (79) unsafe_block -> UNSAFE BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 103
+
+
+state 81
+
+    (62) while_block -> WHILE ident BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 104
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 82
+
+    (63) while_block -> WHILE ident EQUALS_COMP . LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> WHILE ident EQUALS_COMP . LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+
+    LIT_INTEGER     shift and go to state 106
+    LIT_FLOAT       shift and go to state 105
+
+
+state 83
+
+    (61) while_block -> WHILE FALSE BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 107
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 84
+
+    (60) while_block -> WHILE TRUE BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 108
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 85
+
+    (28) print_ident -> PRINT ident SEMICOLON .
+
+    LET             reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    PRINT           reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    ident           reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    LOOP            reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    WHILE           reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    FOR             reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    IF              reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    UNSAFE          reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    MATCH           reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    STRUCT          reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    END_BLOCK       reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+    mat             reduce using rule 28 (print_ident -> PRINT ident SEMICOLON .)
+
+
+state 86
+
+    (23) non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE . CLOSE_PARANTHESIS SEMICOLON
+
+    CLOSE_PARANTHESIS shift and go to state 109
+
+
+state 87
+
+    (80) match_block -> MATCH ident BEGIN_BLOCK . match_stmt END_BLOCK
+    (81) match_stmt -> . non_block_stmt mat non_block_stmt
+    (82) match_stmt -> . LIT_INTEGER mat non_block_stmt
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+
+    LIT_INTEGER     shift and go to state 111
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+
+    fn_call                        shift and go to state 34
+    binop                          shift and go to state 37
+    non_block_stmt                 shift and go to state 112
+    match_stmt                     shift and go to state 110
+    print_ident                    shift and go to state 31
+    bitop                          shift and go to state 33
+
+state 88
+
+    (83) struct_block -> STRUCT ident BEGIN_BLOCK . struct_stmt END_BLOCK
+    (84) struct_stmt -> . ident COLON i32
+
+    ident           shift and go to state 113
+
+    struct_stmt                    shift and go to state 114
+
+state 89
+
+    (65) for_block -> FOR ident IN . LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+
+    LIT_INTEGER     shift and go to state 115
+
+
+state 90
+
+    (66) if_block -> IF OPEN_PARANTHESIS ident . operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> IF OPEN_PARANTHESIS ident . operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (68) operator -> . EQUALS_COMP
+    (69) operator -> . GREATER_EQUAL_OP
+    (70) operator -> . LESS_EQUAL_OP
+    (71) operator -> . LESS_THAN
+    (72) operator -> . GREATER_THAN
+    (73) operator -> . LESSEQUAL
+    (74) operator -> . NOTEQUAL
+    (75) operator -> . OR_OP
+    (76) operator -> . AND_OP
+
+    EQUALS_COMP     shift and go to state 118
+    GREATER_EQUAL_OP shift and go to state 124
+    LESS_EQUAL_OP   shift and go to state 116
+    LESS_THAN       shift and go to state 123
+    GREATER_THAN    shift and go to state 121
+    LESSEQUAL       shift and go to state 125
+    NOTEQUAL        shift and go to state 117
+    OR_OP           shift and go to state 119
+    AND_OP          shift and go to state 120
+
+    operator                       shift and go to state 122
+
+state 91
+
+    (30) expr -> ident .
+    (38) b_expr -> ident .
+
+  ! reduce/reduce conflict for SEMICOLON resolved using rule 30 (expr -> ident .)
+    SEMICOLON       reduce using rule 30 (expr -> ident .)
+    PLUS            reduce using rule 30 (expr -> ident .)
+    MINUS           reduce using rule 30 (expr -> ident .)
+    MULTIPLICATION  reduce using rule 30 (expr -> ident .)
+    DIVISION        reduce using rule 30 (expr -> ident .)
+    MODULUS         reduce using rule 30 (expr -> ident .)
+    AND_LOGICAL     reduce using rule 38 (b_expr -> ident .)
+    OR_LOGICAL      reduce using rule 38 (b_expr -> ident .)
+    XOR_OP          reduce using rule 38 (b_expr -> ident .)
+    NOT_OP          reduce using rule 38 (b_expr -> ident .)
+    LEFT_SHIFT      reduce using rule 38 (b_expr -> ident .)
+    RIGHT_SHIFT     reduce using rule 38 (b_expr -> ident .)
+
+  ! SEMICOLON       [ reduce using rule 38 (b_expr -> ident .) ]
+
+
+state 92
+
+    (37) bitop -> ident ASSIGNMENT_OP b_expr . SEMICOLON
+    (39) b_expr -> b_expr . bit_op ident
+    (40) bit_op -> . AND_LOGICAL
+    (41) bit_op -> . OR_LOGICAL
+    (42) bit_op -> . XOR_OP
+    (43) bit_op -> . NOT_OP
+    (44) bit_op -> . LEFT_SHIFT
+    (45) bit_op -> . RIGHT_SHIFT
+
+    SEMICOLON       shift and go to state 126
+    AND_LOGICAL     shift and go to state 130
+    OR_LOGICAL      shift and go to state 132
+    XOR_OP          shift and go to state 133
+    NOT_OP          shift and go to state 131
+    LEFT_SHIFT      shift and go to state 128
+    RIGHT_SHIFT     shift and go to state 127
+
+    bit_op                         shift and go to state 129
+
+state 93
+
+    (29) binop -> ident ASSIGNMENT_OP expr . SEMICOLON
+    (31) expr -> expr . arith_op ident
+    (32) arith_op -> . PLUS
+    (33) arith_op -> . MINUS
+    (34) arith_op -> . MULTIPLICATION
+    (35) arith_op -> . DIVISION
+    (36) arith_op -> . MODULUS
+
+    SEMICOLON       shift and go to state 136
+    PLUS            shift and go to state 137
+    MINUS           shift and go to state 140
+    MULTIPLICATION  shift and go to state 138
+    DIVISION        shift and go to state 135
+    MODULUS         shift and go to state 139
+
+    arith_op                       shift and go to state 134
+
+state 94
+
+    (47) fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS . SEMICOLON
+
+    SEMICOLON       shift and go to state 141
+
+
+state 95
+
+    (46) fn_call -> ident OPEN_PARANTHESIS arguments . CLOSE_PARANTHESIS SEMICOLON
+
+    CLOSE_PARANTHESIS shift and go to state 142
+
+
+state 96
+
+    (77) if_else_block -> if_block ELSE BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 143
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 97
+
+    (78) else_if_block -> if_block ELSE if_block . ELSE BEGIN_BLOCK stmts END_BLOCK
+
+    ELSE            shift and go to state 144
+
+
+state 98
+
+    (19) non_block_stmt -> LET MUT ident . ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> LET MUT ident . ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> LET MUT ident . ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> LET MUT ident . ASSIGNMENT_OP FALSE SEMICOLON
+
+    ASSIGNMENT_OP   shift and go to state 145
+
+
+state 99
+
+    (13) non_block_stmt -> LET ident ASSIGNMENT_OP . SENTENCE SEMICOLON
+    (14) non_block_stmt -> LET ident ASSIGNMENT_OP . LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> LET ident ASSIGNMENT_OP . LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> LET ident ASSIGNMENT_OP . MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> LET ident ASSIGNMENT_OP . TRUE SEMICOLON
+    (18) non_block_stmt -> LET ident ASSIGNMENT_OP . FALSE SEMICOLON
+
+    SENTENCE        shift and go to state 147
+    LIT_INTEGER     shift and go to state 149
+    LIT_FLOAT       shift and go to state 148
+    MINUS           shift and go to state 151
+    TRUE            shift and go to state 150
+    FALSE           shift and go to state 146
+
+
+state 100
+
+    (59) loop_block -> LOOP BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 152
+
+
+state 101
+
+    (5) fun_def -> FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .
+
+    FN              reduce using rule 5 (fun_def -> FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 102
+
+    (7) fun_def -> fun_def FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .
+
+    FN              reduce using rule 7 (fun_def -> fun_def FN ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 103
+
+    (79) unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 79 (unsafe_block -> UNSAFE BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 104
+
+    (62) while_block -> WHILE ident BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 153
+
+
+state 105
+
+    (64) while_block -> WHILE ident EQUALS_COMP LIT_FLOAT . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 154
+
+
+state 106
+
+    (63) while_block -> WHILE ident EQUALS_COMP LIT_INTEGER . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 155
+
+
+state 107
+
+    (61) while_block -> WHILE FALSE BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 156
+
+
+state 108
+
+    (60) while_block -> WHILE TRUE BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 157
+
+
+state 109
+
+    (23) non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS . SEMICOLON
+
+    SEMICOLON       shift and go to state 158
+
+
+state 110
+
+    (80) match_block -> MATCH ident BEGIN_BLOCK match_stmt . END_BLOCK
+
+    END_BLOCK       shift and go to state 159
+
+
+state 111
+
+    (82) match_stmt -> LIT_INTEGER . mat non_block_stmt
+
+    mat             shift and go to state 160
+
+
+state 112
+
+    (81) match_stmt -> non_block_stmt . mat non_block_stmt
+
+    mat             shift and go to state 161
+
+
+state 113
+
+    (84) struct_stmt -> ident . COLON i32
+
+    COLON           shift and go to state 162
+
+
+state 114
+
+    (83) struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt . END_BLOCK
+
+    END_BLOCK       shift and go to state 163
+
+
+state 115
+
+    (65) for_block -> FOR ident IN LIT_INTEGER . D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+
+    D_DOT           shift and go to state 164
+
+
+state 116
+
+    (70) operator -> LESS_EQUAL_OP .
+
+    LIT_INTEGER     reduce using rule 70 (operator -> LESS_EQUAL_OP .)
+    EQUALS_COMP     reduce using rule 70 (operator -> LESS_EQUAL_OP .)
+
+
+state 117
+
+    (74) operator -> NOTEQUAL .
+
+    LIT_INTEGER     reduce using rule 74 (operator -> NOTEQUAL .)
+    EQUALS_COMP     reduce using rule 74 (operator -> NOTEQUAL .)
+
+
+state 118
+
+    (68) operator -> EQUALS_COMP .
+
+    LIT_INTEGER     reduce using rule 68 (operator -> EQUALS_COMP .)
+    EQUALS_COMP     reduce using rule 68 (operator -> EQUALS_COMP .)
+
+
+state 119
+
+    (75) operator -> OR_OP .
+
+    LIT_INTEGER     reduce using rule 75 (operator -> OR_OP .)
+    EQUALS_COMP     reduce using rule 75 (operator -> OR_OP .)
+
+
+state 120
+
+    (76) operator -> AND_OP .
+
+    LIT_INTEGER     reduce using rule 76 (operator -> AND_OP .)
+    EQUALS_COMP     reduce using rule 76 (operator -> AND_OP .)
+
+
+state 121
+
+    (72) operator -> GREATER_THAN .
+
+    LIT_INTEGER     reduce using rule 72 (operator -> GREATER_THAN .)
+    EQUALS_COMP     reduce using rule 72 (operator -> GREATER_THAN .)
+
+
+state 122
+
+    (66) if_block -> IF OPEN_PARANTHESIS ident operator . LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> IF OPEN_PARANTHESIS ident operator . EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    LIT_INTEGER     shift and go to state 166
+    EQUALS_COMP     shift and go to state 165
+
+
+state 123
+
+    (71) operator -> LESS_THAN .
+
+    LIT_INTEGER     reduce using rule 71 (operator -> LESS_THAN .)
+    EQUALS_COMP     reduce using rule 71 (operator -> LESS_THAN .)
+
+
+state 124
+
+    (69) operator -> GREATER_EQUAL_OP .
+
+    LIT_INTEGER     reduce using rule 69 (operator -> GREATER_EQUAL_OP .)
+    EQUALS_COMP     reduce using rule 69 (operator -> GREATER_EQUAL_OP .)
+
+
+state 125
+
+    (73) operator -> LESSEQUAL .
+
+    LIT_INTEGER     reduce using rule 73 (operator -> LESSEQUAL .)
+    EQUALS_COMP     reduce using rule 73 (operator -> LESSEQUAL .)
+
+
+state 126
+
+    (37) bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .
+
+    LET             reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    PRINT           reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    ident           reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    LOOP            reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    WHILE           reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    FOR             reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    IF              reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    UNSAFE          reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    MATCH           reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    STRUCT          reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    END_BLOCK       reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+    mat             reduce using rule 37 (bitop -> ident ASSIGNMENT_OP b_expr SEMICOLON .)
+
+
+state 127
+
+    (45) bit_op -> RIGHT_SHIFT .
+
+    ident           reduce using rule 45 (bit_op -> RIGHT_SHIFT .)
+
+
+state 128
+
+    (44) bit_op -> LEFT_SHIFT .
+
+    ident           reduce using rule 44 (bit_op -> LEFT_SHIFT .)
+
+
+state 129
+
+    (39) b_expr -> b_expr bit_op . ident
+
+    ident           shift and go to state 167
+
+
+state 130
+
+    (40) bit_op -> AND_LOGICAL .
+
+    ident           reduce using rule 40 (bit_op -> AND_LOGICAL .)
+
+
+state 131
+
+    (43) bit_op -> NOT_OP .
+
+    ident           reduce using rule 43 (bit_op -> NOT_OP .)
+
+
+state 132
+
+    (41) bit_op -> OR_LOGICAL .
+
+    ident           reduce using rule 41 (bit_op -> OR_LOGICAL .)
+
+
+state 133
+
+    (42) bit_op -> XOR_OP .
+
+    ident           reduce using rule 42 (bit_op -> XOR_OP .)
+
+
+state 134
+
+    (31) expr -> expr arith_op . ident
+
+    ident           shift and go to state 168
+
+
+state 135
+
+    (35) arith_op -> DIVISION .
+
+    ident           reduce using rule 35 (arith_op -> DIVISION .)
+
+
+state 136
+
+    (29) binop -> ident ASSIGNMENT_OP expr SEMICOLON .
+
+    mat             reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    LET             reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    PRINT           reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    ident           reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    LOOP            reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    WHILE           reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    FOR             reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    IF              reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    UNSAFE          reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    MATCH           reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    STRUCT          reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+    END_BLOCK       reduce using rule 29 (binop -> ident ASSIGNMENT_OP expr SEMICOLON .)
+
+
+state 137
+
+    (32) arith_op -> PLUS .
+
+    ident           reduce using rule 32 (arith_op -> PLUS .)
+
+
+state 138
+
+    (34) arith_op -> MULTIPLICATION .
+
+    ident           reduce using rule 34 (arith_op -> MULTIPLICATION .)
+
+
+state 139
+
+    (36) arith_op -> MODULUS .
+
+    ident           reduce using rule 36 (arith_op -> MODULUS .)
+
+
+state 140
+
+    (33) arith_op -> MINUS .
+
+    ident           reduce using rule 33 (arith_op -> MINUS .)
+
+
+state 141
+
+    (47) fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .
+
+    LET             reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    PRINT           reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    ident           reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    LOOP            reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    WHILE           reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    FOR             reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    IF              reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    UNSAFE          reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    MATCH           reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    STRUCT          reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    END_BLOCK       reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+    mat             reduce using rule 47 (fn_call -> ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON .)
+
+
+state 142
+
+    (46) fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS . SEMICOLON
+
+    SEMICOLON       shift and go to state 169
+
+
+state 143
+
+    (77) if_else_block -> if_block ELSE BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 170
+
+
+state 144
+
+    (78) else_if_block -> if_block ELSE if_block ELSE . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 171
+
+
+state 145
+
+    (19) non_block_stmt -> LET MUT ident ASSIGNMENT_OP . LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> LET MUT ident ASSIGNMENT_OP . LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> LET MUT ident ASSIGNMENT_OP . TRUE SEMICOLON
+    (22) non_block_stmt -> LET MUT ident ASSIGNMENT_OP . FALSE SEMICOLON
+
+    LIT_INTEGER     shift and go to state 174
+    LIT_FLOAT       shift and go to state 173
+    TRUE            shift and go to state 175
+    FALSE           shift and go to state 172
+
+
+state 146
+
+    (18) non_block_stmt -> LET ident ASSIGNMENT_OP FALSE . SEMICOLON
+
+    SEMICOLON       shift and go to state 176
+
+
+state 147
+
+    (13) non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE . SEMICOLON
+
+    SEMICOLON       shift and go to state 177
+
+
+state 148
+
+    (15) non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT . SEMICOLON
+
+    SEMICOLON       shift and go to state 178
+
+
+state 149
+
+    (14) non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER . SEMICOLON
+
+    SEMICOLON       shift and go to state 179
+
+
+state 150
+
+    (17) non_block_stmt -> LET ident ASSIGNMENT_OP TRUE . SEMICOLON
+
+    SEMICOLON       shift and go to state 180
+
+
+state 151
+
+    (16) non_block_stmt -> LET ident ASSIGNMENT_OP MINUS . LIT_INTEGER SEMICOLON
+
+    LIT_INTEGER     shift and go to state 181
+
+
+state 152
+
+    (59) loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 59 (loop_block -> LOOP BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 153
+
+    (62) while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 62 (while_block -> WHILE ident BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 154
+
+    (64) while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 182
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 155
+
+    (63) while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 183
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 156
+
+    (61) while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 61 (while_block -> WHILE FALSE BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 157
+
+    (60) while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 60 (while_block -> WHILE TRUE BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 158
+
+    (23) non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .
+
+    LET             reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    PRINT           reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    ident           reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    LOOP            reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    WHILE           reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    FOR             reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    IF              reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    UNSAFE          reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    MATCH           reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    STRUCT          reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    END_BLOCK       reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+    mat             reduce using rule 23 (non_block_stmt -> PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON .)
+
+
+state 159
+
+    (80) match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .
+
+    LET             reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    PRINT           reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    ident           reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    LOOP            reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    WHILE           reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    FOR             reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    IF              reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    UNSAFE          reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    MATCH           reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    STRUCT          reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+    END_BLOCK       reduce using rule 80 (match_block -> MATCH ident BEGIN_BLOCK match_stmt END_BLOCK .)
+
+
+state 160
+
+    (82) match_stmt -> LIT_INTEGER mat . non_block_stmt
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+
+    fn_call                        shift and go to state 34
+    binop                          shift and go to state 37
+    non_block_stmt                 shift and go to state 184
+    print_ident                    shift and go to state 31
+    bitop                          shift and go to state 33
+
+state 161
+
+    (81) match_stmt -> non_block_stmt mat . non_block_stmt
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+
+    fn_call                        shift and go to state 34
+    binop                          shift and go to state 37
+    non_block_stmt                 shift and go to state 185
+    print_ident                    shift and go to state 31
+    bitop                          shift and go to state 33
+
+state 162
+
+    (84) struct_stmt -> ident COLON . i32
+
+    i32             shift and go to state 186
+
+
+state 163
+
+    (83) struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .
+
+    LET             reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    PRINT           reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    ident           reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    LOOP            reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    WHILE           reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    FOR             reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    IF              reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    UNSAFE          reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    MATCH           reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    STRUCT          reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+    END_BLOCK       reduce using rule 83 (struct_block -> STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK .)
+
+
+state 164
+
+    (65) for_block -> FOR ident IN LIT_INTEGER D_DOT . LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+
+    LIT_INTEGER     shift and go to state 187
+
+
+state 165
+
+    (67) if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP . LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    LIT_FLOAT       shift and go to state 188
+
+
+state 166
+
+    (66) if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER . CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    CLOSE_PARANTHESIS shift and go to state 189
+
+
+state 167
+
+    (39) b_expr -> b_expr bit_op ident .
+
+    SEMICOLON       reduce using rule 39 (b_expr -> b_expr bit_op ident .)
+    AND_LOGICAL     reduce using rule 39 (b_expr -> b_expr bit_op ident .)
+    OR_LOGICAL      reduce using rule 39 (b_expr -> b_expr bit_op ident .)
+    XOR_OP          reduce using rule 39 (b_expr -> b_expr bit_op ident .)
+    NOT_OP          reduce using rule 39 (b_expr -> b_expr bit_op ident .)
+    LEFT_SHIFT      reduce using rule 39 (b_expr -> b_expr bit_op ident .)
+    RIGHT_SHIFT     reduce using rule 39 (b_expr -> b_expr bit_op ident .)
+
+
+state 168
+
+    (31) expr -> expr arith_op ident .
+
+    SEMICOLON       reduce using rule 31 (expr -> expr arith_op ident .)
+    PLUS            reduce using rule 31 (expr -> expr arith_op ident .)
+    MINUS           reduce using rule 31 (expr -> expr arith_op ident .)
+    MULTIPLICATION  reduce using rule 31 (expr -> expr arith_op ident .)
+    DIVISION        reduce using rule 31 (expr -> expr arith_op ident .)
+    MODULUS         reduce using rule 31 (expr -> expr arith_op ident .)
+
+
+state 169
+
+    (46) fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .
+
+    LET             reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    PRINT           reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    ident           reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    LOOP            reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    WHILE           reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    FOR             reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    IF              reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    UNSAFE          reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    MATCH           reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    STRUCT          reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    END_BLOCK       reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+    mat             reduce using rule 46 (fn_call -> ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON .)
+
+
+state 170
+
+    (77) if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 77 (if_else_block -> if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 171
+
+    (78) else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 190
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 172
+
+    (22) non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE . SEMICOLON
+
+    SEMICOLON       shift and go to state 191
+
+
+state 173
+
+    (20) non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT . SEMICOLON
+
+    SEMICOLON       shift and go to state 192
+
+
+state 174
+
+    (19) non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER . SEMICOLON
+
+    SEMICOLON       shift and go to state 193
+
+
+state 175
+
+    (21) non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE . SEMICOLON
+
+    SEMICOLON       shift and go to state 194
+
+
+state 176
+
+    (18) non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .
+
+    LET             reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    PRINT           reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    ident           reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    LOOP            reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    WHILE           reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    FOR             reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    IF              reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    UNSAFE          reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    MATCH           reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    STRUCT          reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    END_BLOCK       reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    mat             reduce using rule 18 (non_block_stmt -> LET ident ASSIGNMENT_OP FALSE SEMICOLON .)
+
+
+state 177
+
+    (13) non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .
+
+    LET             reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    PRINT           reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    ident           reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    LOOP            reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    WHILE           reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    FOR             reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    IF              reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    UNSAFE          reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    MATCH           reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    STRUCT          reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    END_BLOCK       reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+    mat             reduce using rule 13 (non_block_stmt -> LET ident ASSIGNMENT_OP SENTENCE SEMICOLON .)
+
+
+state 178
+
+    (15) non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .
+
+    LET             reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    PRINT           reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    ident           reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    LOOP            reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    WHILE           reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    FOR             reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    IF              reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    UNSAFE          reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    MATCH           reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    STRUCT          reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    END_BLOCK       reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    mat             reduce using rule 15 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+
+
+state 179
+
+    (14) non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .
+
+    LET             reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    PRINT           reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    ident           reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    LOOP            reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    WHILE           reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    FOR             reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    IF              reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    UNSAFE          reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    MATCH           reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    STRUCT          reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    END_BLOCK       reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    mat             reduce using rule 14 (non_block_stmt -> LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+
+
+state 180
+
+    (17) non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .
+
+    LET             reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    PRINT           reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    ident           reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    LOOP            reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    WHILE           reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    FOR             reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    IF              reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    UNSAFE          reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    MATCH           reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    STRUCT          reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    END_BLOCK       reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    mat             reduce using rule 17 (non_block_stmt -> LET ident ASSIGNMENT_OP TRUE SEMICOLON .)
+
+
+state 181
+
+    (16) non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER . SEMICOLON
+
+    SEMICOLON       shift and go to state 195
+
+
+state 182
+
+    (64) while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 196
+
+
+state 183
+
+    (63) while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 197
+
+
+state 184
+
+    (82) match_stmt -> LIT_INTEGER mat non_block_stmt .
+
+    END_BLOCK       reduce using rule 82 (match_stmt -> LIT_INTEGER mat non_block_stmt .)
+
+
+state 185
+
+    (81) match_stmt -> non_block_stmt mat non_block_stmt .
+
+    END_BLOCK       reduce using rule 81 (match_stmt -> non_block_stmt mat non_block_stmt .)
+
+
+state 186
+
+    (84) struct_stmt -> ident COLON i32 .
+
+    END_BLOCK       reduce using rule 84 (struct_stmt -> ident COLON i32 .)
+
+
+state 187
+
+    (65) for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 198
+
+
+state 188
+
+    (67) if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT . CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+
+    CLOSE_PARANTHESIS shift and go to state 199
+
+
+state 189
+
+    (66) if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 200
+
+
+state 190
+
+    (78) else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 201
+
+
+state 191
+
+    (22) non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .
+
+    LET             reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    PRINT           reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    ident           reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    LOOP            reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    WHILE           reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    FOR             reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    IF              reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    UNSAFE          reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    MATCH           reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    STRUCT          reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    END_BLOCK       reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+    mat             reduce using rule 22 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON .)
+
+
+state 192
+
+    (20) non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .
+
+    LET             reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    PRINT           reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    ident           reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    LOOP            reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    WHILE           reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    FOR             reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    IF              reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    UNSAFE          reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    MATCH           reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    STRUCT          reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    END_BLOCK       reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+    mat             reduce using rule 20 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON .)
+
+
+state 193
+
+    (19) non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .
+
+    LET             reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    PRINT           reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    ident           reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    LOOP            reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    WHILE           reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    FOR             reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    IF              reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    UNSAFE          reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    MATCH           reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    STRUCT          reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    END_BLOCK       reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+    mat             reduce using rule 19 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON .)
+
+
+state 194
+
+    (21) non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .
+
+    LET             reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    PRINT           reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    ident           reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    LOOP            reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    WHILE           reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    FOR             reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    IF              reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    UNSAFE          reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    MATCH           reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    STRUCT          reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    END_BLOCK       reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+    mat             reduce using rule 21 (non_block_stmt -> LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON .)
+
+
+state 195
+
+    (16) non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .
+
+    LET             reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    PRINT           reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    ident           reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    LOOP            reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    WHILE           reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    FOR             reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    IF              reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    UNSAFE          reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    MATCH           reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    STRUCT          reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    END_BLOCK       reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+    mat             reduce using rule 16 (non_block_stmt -> LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON .)
+
+
+state 196
+
+    (64) while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 64 (while_block -> WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 197
+
+    (63) while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 63 (while_block -> WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 198
+
+    (65) for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 202
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 199
+
+    (67) if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS . BEGIN_BLOCK stmts END_BLOCK
+
+    BEGIN_BLOCK     shift and go to state 203
+
+
+state 200
+
+    (66) if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 204
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 201
+
+    (78) else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 78 (else_if_block -> if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 202
+
+    (65) for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 205
+
+
+state 203
+
+    (67) if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK . stmts END_BLOCK
+    (9) stmts -> . non_block_stmt
+    (10) stmts -> . non_block_stmt stmts
+    (11) stmts -> . block_stmt
+    (12) stmts -> . block_stmt stmts
+    (13) non_block_stmt -> . LET ident ASSIGNMENT_OP SENTENCE SEMICOLON
+    (14) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (15) non_block_stmt -> . LET ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (16) non_block_stmt -> . LET ident ASSIGNMENT_OP MINUS LIT_INTEGER SEMICOLON
+    (17) non_block_stmt -> . LET ident ASSIGNMENT_OP TRUE SEMICOLON
+    (18) non_block_stmt -> . LET ident ASSIGNMENT_OP FALSE SEMICOLON
+    (19) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_INTEGER SEMICOLON
+    (20) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP LIT_FLOAT SEMICOLON
+    (21) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP TRUE SEMICOLON
+    (22) non_block_stmt -> . LET MUT ident ASSIGNMENT_OP FALSE SEMICOLON
+    (23) non_block_stmt -> . PRINT OPEN_PARANTHESIS SENTENCE CLOSE_PARANTHESIS SEMICOLON
+    (24) non_block_stmt -> . binop
+    (25) non_block_stmt -> . bitop
+    (26) non_block_stmt -> . fn_call
+    (27) non_block_stmt -> . print_ident
+    (50) block_stmt -> . loop_block
+    (51) block_stmt -> . while_block
+    (52) block_stmt -> . for_block
+    (53) block_stmt -> . if_block
+    (54) block_stmt -> . if_else_block
+    (55) block_stmt -> . else_if_block
+    (56) block_stmt -> . unsafe_block
+    (57) block_stmt -> . match_block
+    (58) block_stmt -> . struct_block
+    (29) binop -> . ident ASSIGNMENT_OP expr SEMICOLON
+    (37) bitop -> . ident ASSIGNMENT_OP b_expr SEMICOLON
+    (46) fn_call -> . ident OPEN_PARANTHESIS arguments CLOSE_PARANTHESIS SEMICOLON
+    (47) fn_call -> . ident OPEN_PARANTHESIS CLOSE_PARANTHESIS SEMICOLON
+    (28) print_ident -> . PRINT ident SEMICOLON
+    (59) loop_block -> . LOOP BEGIN_BLOCK stmts END_BLOCK
+    (60) while_block -> . WHILE TRUE BEGIN_BLOCK stmts END_BLOCK
+    (61) while_block -> . WHILE FALSE BEGIN_BLOCK stmts END_BLOCK
+    (62) while_block -> . WHILE ident BEGIN_BLOCK stmts END_BLOCK
+    (63) while_block -> . WHILE ident EQUALS_COMP LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (64) while_block -> . WHILE ident EQUALS_COMP LIT_FLOAT BEGIN_BLOCK stmts END_BLOCK
+    (65) for_block -> . FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK
+    (66) if_block -> . IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (67) if_block -> . IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK
+    (77) if_else_block -> . if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (78) else_if_block -> . if_block ELSE if_block ELSE BEGIN_BLOCK stmts END_BLOCK
+    (79) unsafe_block -> . UNSAFE BEGIN_BLOCK stmts END_BLOCK
+    (80) match_block -> . MATCH ident BEGIN_BLOCK match_stmt END_BLOCK
+    (83) struct_block -> . STRUCT ident BEGIN_BLOCK struct_stmt END_BLOCK
+
+    LET             shift and go to state 50
+    PRINT           shift and go to state 32
+    ident           shift and go to state 46
+    LOOP            shift and go to state 52
+    WHILE           shift and go to state 30
+    FOR             shift and go to state 42
+    IF              shift and go to state 44
+    UNSAFE          shift and go to state 29
+    MATCH           shift and go to state 35
+    STRUCT          shift and go to state 41
+
+    struct_block                   shift and go to state 28
+    for_block                      shift and go to state 27
+    unsafe_block                   shift and go to state 40
+    non_block_stmt                 shift and go to state 48
+    bitop                          shift and go to state 33
+    fn_call                        shift and go to state 34
+    stmts                          shift and go to state 206
+    else_if_block                  shift and go to state 38
+    block_stmt                     shift and go to state 39
+    binop                          shift and go to state 37
+    loop_block                     shift and go to state 43
+    if_else_block                  shift and go to state 45
+    if_block                       shift and go to state 47
+    while_block                    shift and go to state 49
+    match_block                    shift and go to state 51
+    print_ident                    shift and go to state 31
+
+state 204
+
+    (66) if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 207
+
+
+state 205
+
+    (65) for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .
+
+    LET             reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 65 (for_block -> FOR ident IN LIT_INTEGER D_DOT LIT_INTEGER BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 206
+
+    (67) if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts . END_BLOCK
+
+    END_BLOCK       shift and go to state 208
+
+
+state 207
+
+    (66) if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .
+
+    ELSE            reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    LET             reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 66 (if_block -> IF OPEN_PARANTHESIS ident operator LIT_INTEGER CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+
+
+state 208
+
+    (67) if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .
+
+    ELSE            reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    LET             reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    PRINT           reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    ident           reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    LOOP            reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    WHILE           reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    FOR             reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    IF              reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    UNSAFE          reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    MATCH           reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    STRUCT          reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+    END_BLOCK       reduce using rule 67 (if_block -> IF OPEN_PARANTHESIS ident operator EQUALS_COMP LIT_FLOAT CLOSE_PARANTHESIS BEGIN_BLOCK stmts END_BLOCK .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: reduce/reduce conflict in state 91 resolved using rule (expr -> ident)
+WARNING: rejected rule (b_expr -> ident) in state 91
